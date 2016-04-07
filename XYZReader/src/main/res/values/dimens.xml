@@ -1,4 +1,8 @@
 <resources>
+
+    <!-- Main Toolbar -->
+    <dimen name="toolbar_max_height">128dp</dimen>
+
     <!-- detail -->
     <dimen name="detail_title_text_size">32sp</dimen>
     <dimen name="detail_body_text_size">22sp</dimen>
