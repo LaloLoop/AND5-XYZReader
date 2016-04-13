@@ -20,9 +20,6 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:scrollbarStyle="outsideOverlay"
-            android:paddingLeft="@dimen/list_side_margin"
-            android:paddingRight="@dimen/list_side_margin"
-            android:paddingBottom="28dp"
             />
 
     </android.support.v4.widget.SwipeRefreshLayout>
@@ -44,6 +41,8 @@
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:paddingLeft="@dimen/detail_inner_horiz_margin"
+            android:paddingRight="@dimen/detail_inner_horiz_margin"
             app:titleEnabled="false"
             >
 
