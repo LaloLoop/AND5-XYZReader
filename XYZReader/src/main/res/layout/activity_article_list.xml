@@ -4,7 +4,6 @@
     android:id="@+id/mainContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     >
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -18,8 +17,6 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:scrollbarStyle="outsideOverlay"
             />
 
     </android.support.v4.widget.SwipeRefreshLayout>
@@ -29,13 +26,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_max_height"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:fitsSystemWindows="true">
+        >
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
             app:contentScrim="#FF0000"
             android:background="#FF0000"
             app:expandedTitleMarginEnd="64dp"
