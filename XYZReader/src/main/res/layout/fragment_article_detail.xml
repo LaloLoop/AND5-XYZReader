@@ -49,7 +49,8 @@
                 android:orientation="vertical"
                 android:layout_gravity="bottom"
                 app:layout_scrollFlags="exitUntilCollapsed"
-                android:padding="@dimen/detail_inner_horiz_margin"
+                android:paddingLeft="@dimen/title_hori_padding"
+                android:paddingStart="@dimen/title_hori_padding"
                 android:layout_marginBottom="@dimen/detail_metabar_title_bottom_padding"
                 >
 
@@ -77,7 +78,7 @@
                 android:lines="1"
                 android:ellipsize="end"
                 android:paddingLeft="45dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/collapsed_title_margin_bottom"
                 android:textStyle="bold"
                 style="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/white"
@@ -98,7 +99,10 @@
             android:id="@+id/article_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/detail_inner_horiz_margin"
+            android:paddingLeft="@dimen/detail_inner_horiz_margin"
+            android:paddingRight="@dimen/detail_inner_horiz_margin"
+            android:paddingTop="@dimen/detail_inner_vert_margin"
+            android:paddingBottom="@dimen/detail_inner_vert_margin"
             tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac ante ut nisi dapibus porttitor. Duis sapien eros, porta eu hendrerit id, porta at augue. Nulla ultricies nibh nec tellus gravida vulputate. Ut lacus nibh, tincidunt id elit a, maximus viverra lorem. Nullam non purus porttitor, maximus nisi id, gravida sapien. Cras vestibulum magna in libero dignissim, sit amet ornare purus malesuada. Curabitur faucibus ex vulputate urna gravida, quis efficitur urna semper. Sed vestibulum justo ut mollis sagittis. Integer sit amet mattis lectus. Aenean lacinia nisi non lacus porttitor, quis consequat justo molestie. Proin sollicitudin risus et bibendum aliquam. Integer non aliquam dui, ut congue lacus. Phasellus nec iaculis leo. Phasellus id mi quis augue aliquam varius in ut metus.
 
 Mauris et sem nec diam dictum tincidunt. Praesent lacinia commodo pharetra. In faucibus vel lorem nec mattis. Integer fringilla nulla elit, vel venenatis libero dapibus et. Vivamus ultricies dictum lacus, vel porttitor sapien. Curabitur ornare urna non pellentesque sodales. Proin id sodales leo. Fusce placerat eros quis magna fringilla rutrum."
@@ -114,6 +118,8 @@ Mauris et sem nec diam dictum tincidunt. Praesent lacinia commodo pharetra. In f
         android:layout_height="wrap_content"
         app:rippleColor="@android:color/white"
         app:layout_anchorGravity="bottom|right|end"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
         />
 
 </android.support.design.widget.CoordinatorLayout >

@@ -33,7 +33,7 @@
             android:textSize="12sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/ltgray"
+            android:textColor="@color/divider"
             android:maxLines="1"
             android:singleLine="true"
             android:ellipsize="end" />

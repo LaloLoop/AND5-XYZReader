@@ -159,7 +159,7 @@ public class ArticleListActivity extends AppCompatActivity implements
             String author = mCursor.getString(ArticleLoader.Query.AUTHOR);
             holder.subtitleView.setText(getString(R.string.by_line_format, relTimestamp, author));
 
-            String fullUrl = mCursor.getString(ArticleLoader.Query.THUMB_URL);
+            String fullUrl = mCursor.getString(ArticleLoader.Query.PHOTO_URL);
             Glide.with(ArticleListActivity.this).load(fullUrl).dontAnimate().into(holder.thumbnailView);
             holder.thumbnailView.setBackgroundColor(mCursor.getInt(ArticleLoader.Query.COLOR_PLACEHOLDER));
 //            holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
