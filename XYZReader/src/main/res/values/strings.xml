@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:g="http://schemas.android.com/tools">
 
     <string name="app_name">XYZ Reader</string>
     <string name="welcome_xyz_reader">Welcome to XYZ Reader!</string>
@@ -8,5 +8,6 @@
     <string name="action_share">Share</string>
 
     <string name="up">Up</string>
+    <string name="by_line_format"><g:xliff id="reltime">%s</g:xliff> by <g:xliff id="author">%s</g:xliff></string>
 
 </resources>

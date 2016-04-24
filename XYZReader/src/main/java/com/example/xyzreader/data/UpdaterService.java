@@ -63,15 +63,18 @@ public class UpdaterService extends IntentService {
             for (int i = 0; i < array.length(); i++) {
                 ContentValues values = new ContentValues();
                 JSONObject object = array.getJSONObject(i);
+
                 values.put(ItemsContract.Items.SERVER_ID, object.getString("id" ));
                 values.put(ItemsContract.Items.AUTHOR, object.getString("author" ));
                 values.put(ItemsContract.Items.TITLE, object.getString("title" ));
                 values.put(ItemsContract.Items.BODY, object.getString("body" ));
-                values.put(ItemsContract.Items.THUMB_URL, object.getString("thumb" ));
+                values.put(ItemsContract.Items.THUMB_URL, object.getString("thumb"));
                 values.put(ItemsContract.Items.PHOTO_URL, object.getString("photo" ));
                 values.put(ItemsContract.Items.ASPECT_RATIO, object.getString("aspect_ratio" ));
+                values.put(ItemsContract.Items.COLOR_PLACEHOLDER, object.getInt("color_placeholder"));
                 time.parse3339(object.getString("published_date"));
                 values.put(ItemsContract.Items.PUBLISHED_DATE, time.toMillis(false));
+
                 cpo.add(ContentProviderOperation.newInsert(dirUri).withValues(values).build());
             }
 
