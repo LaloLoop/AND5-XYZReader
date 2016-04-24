@@ -1,12 +1,17 @@
 package com.example.xyzreader.ui;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -15,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -30,11 +36,12 @@ import butterknife.ButterKnife;
  * tablets) or a {@link ArticleDetailActivity} on handsets.
  */
 public class ArticleDetailFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>  {
 
     private static final String FRAGMENT_TAG = "ArticleDetailFragment";
 
     public static final String ARG_ITEM_ID = "item_id";
+    private static final String LOG_TAG = ArticleDetailFragment.class.getSimpleName();
 
     private Cursor mCursor;
     private long mItemId;
@@ -49,8 +56,14 @@ public class ArticleDetailFragment extends Fragment implements
     TextView mBodyView;
     @Bind(R.id.collapsing_toolbar)
     CollapsingToolbarLayout mCollapsingToolbar;
+    @Bind(R.id.appbar)
+    AppBarLayout mAppbarLayout;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
+    @Bind(R.id.detail_info_container)
+    View mDetailInfoContainer;
+    @Bind(R.id.title_collapsed)
+    TextView mTitleCollapsed;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -74,7 +87,6 @@ public class ArticleDetailFragment extends Fragment implements
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
         }
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -88,12 +100,49 @@ public class ArticleDetailFragment extends Fragment implements
         getLoaderManager().initLoader(0, null, this);
     }
 
+    private void setUpHomeUp() {
+        Activity activity = getActivity();
+        if(activity != null && activity instanceof AppCompatActivity) {
+            ((AppCompatActivity) activity).setSupportActionBar(mToolbar);
+            ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
+            if(actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setDisplayShowTitleEnabled(false);
+            }
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         ButterKnife.bind(this, rootView);
+
+        mCollapsingToolbar.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
+
+        mAppbarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                int ctheight = mCollapsingToolbar.getHeight();
+                int minHeight = (int) (2.5 * ViewCompat.getMinimumHeight(mCollapsingToolbar));
+
+                // Height is less than the toolbar's doubled size. Disappear main text
+                if((ctheight + verticalOffset) < minHeight) {
+                    mDetailInfoContainer.animate().alpha(0).setDuration(50);
+                    mDetailInfoContainer.setVisibility(View.GONE);
+                    mTitleCollapsed.animate().alpha(1).setDuration(300);
+                    mTitleCollapsed.setVisibility(View.VISIBLE);
+//                    mCollapsingToolbar.setTitleEnabled(true);
+                } else {
+                    mDetailInfoContainer.animate().alpha(1).setDuration(300);
+                    mDetailInfoContainer.setVisibility(View.VISIBLE);
+                    mTitleCollapsed.animate().alpha(0).setDuration(50);
+                    mTitleCollapsed.setVisibility(View.GONE);
+//                    mCollapsingToolbar.setTitleEnabled(false);
+                }
+            }
+        });
 
 //        mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -105,6 +154,33 @@ public class ArticleDetailFragment extends Fragment implements
 //            }
 //        });
 
+        // in onCreateView: adjust toolbar padding
+        final int initialToolbarHeight = mToolbar.getLayoutParams().height;
+        final int initialStatusBarHeight = getStatusBarHeight();
+        mToolbar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int[] locToolbar = new int[2];
+                mToolbar.getLocationOnScreen(locToolbar);
+                int yToolbar = locToolbar[1];
+                int topPaddingToolbar = mToolbar.getPaddingTop();
+                if (isAdded()) {
+                    //normal case : system status bar padding on toolbar : yToolbar = initialStatusBarHeight && topPaddingToolbar = 0
+                    //abnormal case : no system status bar padding on toolbar -> toolbar behind status bar => add custom padding
+                    if (yToolbar != initialStatusBarHeight && topPaddingToolbar == 0) {
+                        mToolbar.setPadding(0, initialStatusBarHeight, 0, 0);
+                        mToolbar.getLayoutParams().height = initialToolbarHeight + initialStatusBarHeight;
+                    }
+                    //abnormal case : system status bar padding and custom padding on toolbar -> toolbar with padding too large => remove custom padding
+                    else if (yToolbar == initialStatusBarHeight && topPaddingToolbar == initialStatusBarHeight) {
+                        mToolbar.setPadding(0, 0, 0, 0);
+                        mToolbar.getLayoutParams().height = initialToolbarHeight;
+                    }
+                }
+            }
+        });
+
+//        setUpHomeUp();
         bindViews();
 
         return rootView;
@@ -116,7 +192,10 @@ public class ArticleDetailFragment extends Fragment implements
         mBodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
         if (mCursor != null) {
-            mTitleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
+            String title = mCursor.getString(ArticleLoader.Query.TITLE);
+//            mCollapsingToolbar.setTitle(title);
+            mTitleCollapsed.setText(title);
+            mTitleView.setText(title);
 
             mByLineView.setText(Html.fromHtml(
                     DateUtils.getRelativeTimeSpanString(
@@ -132,8 +211,10 @@ public class ArticleDetailFragment extends Fragment implements
             String url = mCursor.getString(ArticleLoader.Query.PHOTO_URL);
 
             mPhotoView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
-            mCollapsingToolbar.setContentScrimColor(mCursor.getInt(ArticleLoader.Query.COLOR_PLACEHOLDER));
-            mCollapsingToolbar.setBackgroundColor(mCursor.getInt(ArticleLoader.Query.COLOR_PLACEHOLDER));
+            int placeholderColor = mCursor.getInt(ArticleLoader.Query.COLOR_PLACEHOLDER);
+            mCollapsingToolbar.setStatusBarScrimColor(placeholderColor);
+            mCollapsingToolbar.setContentScrimColor(placeholderColor);
+            mCollapsingToolbar.setBackgroundColor(placeholderColor);
 
             Glide.with(this).
                     load(url)
@@ -145,6 +226,15 @@ public class ArticleDetailFragment extends Fragment implements
             mByLineView.setText("N/A" );
             mBodyView.setText("N/A");
         }
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     @Override
@@ -175,5 +265,17 @@ public class ArticleDetailFragment extends Fragment implements
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mCursor = null;
         bindViews();
+    }
+
+
+    public void onBindToolbar() {
+        Activity activity = getActivity();
+        if(activity != null && activity instanceof OnArticleDetailFragment) {
+            ((OnArticleDetailFragment) activity).onAttachToolbar(mToolbar, mItemId);
+        }
+    }
+
+    public interface OnArticleDetailFragment {
+        void onAttachToolbar(Toolbar mToolbar, long itemId);
     }
 }

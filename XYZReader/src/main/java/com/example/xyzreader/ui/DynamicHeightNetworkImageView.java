@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 public class DynamicHeightNetworkImageView extends ImageView {
-    private float mAspectRatio = 1.5f;
+    private float mAspectRatio = 1f;
 
     public DynamicHeightNetworkImageView(Context context) {
         super(context);
@@ -22,6 +22,8 @@ public class DynamicHeightNetworkImageView extends ImageView {
     public void setAspectRatio(float aspectRatio) {
         if(aspectRatio > 1) {
             mAspectRatio = aspectRatio;
+        } else {
+            mAspectRatio = 1.5f;
         }
         requestLayout();
     }
