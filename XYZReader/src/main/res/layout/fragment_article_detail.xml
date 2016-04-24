@@ -1,63 +1,49 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainContent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <TextView
-            android:id="@+id/article_body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/detail_inner_horiz_margin"
-            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac ante ut nisi dapibus porttitor. Duis sapien eros, porta eu hendrerit id, porta at augue. Nulla ultricies nibh nec tellus gravida vulputate. Ut lacus nibh, tincidunt id elit a, maximus viverra lorem. Nullam non purus porttitor, maximus nisi id, gravida sapien. Cras vestibulum magna in libero dignissim, sit amet ornare purus malesuada. Curabitur faucibus ex vulputate urna gravida, quis efficitur urna semper. Sed vestibulum justo ut mollis sagittis. Integer sit amet mattis lectus. Aenean lacinia nisi non lacus porttitor, quis consequat justo molestie. Proin sollicitudin risus et bibendum aliquam. Integer non aliquam dui, ut congue lacus. Phasellus nec iaculis leo. Phasellus id mi quis augue aliquam varius in ut metus.
-
-Mauris et sem nec diam dictum tincidunt. Praesent lacinia commodo pharetra. In faucibus vel lorem nec mattis. Integer fringilla nulla elit, vel venenatis libero dapibus et. Vivamus ultricies dictum lacus, vel porttitor sapien. Curabitur ornare urna non pellentesque sodales. Proin id sodales leo. Fusce placerat eros quis magna fringilla rutrum."
-            />
-
-    </ScrollView>
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_max_height"
+        android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true"
         >
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="#FF0000"
             android:background="#FF0000"
-            app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:expandedTitleMarginEnd="64dp"
             app:titleEnabled="false"
+            android:fitsSystemWindows="true"
             >
+
+            <com.example.xyzreader.ui.DynamicHeightNetworkImageView
+                android:id="@+id/photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="parallax"
+            />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                android:gravity="bottom"
-                app:layout_scrollFlags="scroll|enterAlways"
-                >
-
-            </android.support.v7.widget.Toolbar>
-
-            <ImageView
-                android:id="@+id/photo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax"
+                app:layout_collapseMode="pin"
                 />
 
             <LinearLayout
@@ -73,6 +59,7 @@ Mauris et sem nec diam dictum tincidunt. Praesent lacinia commodo pharetra. In f
                     android:layout_height="wrap_content"
                     tools:text="Hello World"
                     android:layout_gravity="bottom"/>
+
                 <TextView
                     android:id="@+id/article_byline"
                     android:layout_width="match_parent"
@@ -87,9 +74,31 @@ Mauris et sem nec diam dictum tincidunt. Praesent lacinia commodo pharetra. In f
 
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/article_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/detail_inner_horiz_margin"
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac ante ut nisi dapibus porttitor. Duis sapien eros, porta eu hendrerit id, porta at augue. Nulla ultricies nibh nec tellus gravida vulputate. Ut lacus nibh, tincidunt id elit a, maximus viverra lorem. Nullam non purus porttitor, maximus nisi id, gravida sapien. Cras vestibulum magna in libero dignissim, sit amet ornare purus malesuada. Curabitur faucibus ex vulputate urna gravida, quis efficitur urna semper. Sed vestibulum justo ut mollis sagittis. Integer sit amet mattis lectus. Aenean lacinia nisi non lacus porttitor, quis consequat justo molestie. Proin sollicitudin risus et bibendum aliquam. Integer non aliquam dui, ut congue lacus. Phasellus nec iaculis leo. Phasellus id mi quis augue aliquam varius in ut metus.
+
+Mauris et sem nec diam dictum tincidunt. Praesent lacinia commodo pharetra. In faucibus vel lorem nec mattis. Integer fringilla nulla elit, vel venenatis libero dapibus et. Vivamus ultricies dictum lacus, vel porttitor sapien. Curabitur ornare urna non pellentesque sodales. Proin id sodales leo. Fusce placerat eros quis magna fringilla rutrum."
+            />
+
+    </android.support.v4.widget.NestedScrollView>
+
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        app:layout_anchor="@id/appbar"
+        android:src="@drawable/ic_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"/>
+        app:rippleColor="@android:color/white"
+        app:layout_anchorGravity="bottom|right|end"
+        />
 
 </android.support.design.widget.CoordinatorLayout >

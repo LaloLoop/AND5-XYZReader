@@ -4,9 +4,9 @@ import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -15,11 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
+import com.bumptech.glide.Glide;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 
@@ -42,13 +40,15 @@ public class ArticleDetailFragment extends Fragment implements
     private long mItemId;
 
     @Bind(R.id.photo)
-    ImageView mPhotoView;
+    DynamicHeightNetworkImageView mPhotoView;
     @Bind(R.id.article_title)
     TextView mTitleView;
     @Bind(R.id.article_byline)
     TextView mByLineView;
     @Bind(R.id.article_body)
     TextView mBodyView;
+    @Bind(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout mCollapsingToolbar;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -129,25 +129,17 @@ public class ArticleDetailFragment extends Fragment implements
 
             mBodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY)));
 
-            ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
-                    .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
-                        @Override
-                        public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
-                            Bitmap bitmap = imageContainer.getBitmap();
-                            if (bitmap != null) {
-//                                Palette p = Palette.generate(bitmap, 12);
-//                                mMutedColor = p.getDarkMutedColor(0xFF333333);
-                                mPhotoView.setImageBitmap(imageContainer.getBitmap());
-//                                mRootView.findViewById(R.id.meta_bar)
-//                                        .setBackgroundColor(mMutedColor);
-                            }
-                        }
+            String url = mCursor.getString(ArticleLoader.Query.PHOTO_URL);
 
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
+            mPhotoView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
+            mCollapsingToolbar.setContentScrimColor(mCursor.getInt(ArticleLoader.Query.COLOR_PLACEHOLDER));
+            mCollapsingToolbar.setBackgroundColor(mCursor.getInt(ArticleLoader.Query.COLOR_PLACEHOLDER));
 
-                        }
-                    });
+            Glide.with(this).
+                    load(url)
+                    .asBitmap()
+                    .into(mPhotoView);
+
         } else {
             mTitleView.setText("N/A");
             mByLineView.setText("N/A" );

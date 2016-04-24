@@ -9,7 +9,10 @@ public class Config {
     static {
         URL url = null;
         try {
-            url = new URL("https://dl.dropboxusercontent.com/u/231329/xyzreader_data/data.json" );
+            // Original source
+//            url = new URL("https://dl.dropboxusercontent.com/u/231329/xyzreader_data/data.json" );
+            // New source with color place holder to be used when loading images
+            url = new URL("https://www.dropbox.com/s/rc8p8h35pf569kk/data.json?dl=1");
         } catch (MalformedURLException ignored) {
             // TODO: throw a real error
         }

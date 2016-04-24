@@ -25,6 +25,8 @@ public class ItemsContract {
 		String ASPECT_RATIO = "aspect_ratio";
 		/** Type: INTEGER NOT NULL DEFAULT 0 */
 		String PUBLISHED_DATE = "published_date";
+        /** TYPE: INTEGER NOT NULL DEFAULT 0 */
+		String COLOR_PLACEHOLDER = "color_placeholder";
 	}
 
 	public static class Items implements ItemsColumns {
